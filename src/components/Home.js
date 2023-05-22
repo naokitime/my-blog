@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  orderBy,
+} from "firebase/firestore";
 import { auth, db } from "../firebase";
 import "./Home.css";
 
@@ -8,7 +15,8 @@ const Home = () => {
 
   useEffect(() => {
     const getPosts = async () => {
-      const data = await getDocs(collection(db, "posts"));
+      const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+      const data = await getDocs(q);
       setPostList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
     getPosts();
